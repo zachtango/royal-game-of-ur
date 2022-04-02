@@ -1,0 +1,38 @@
+.square{
+    width: 12.5%;
+    height: 100px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(247, 193, 128);
+    border: 1px solid black;
+}
+
+.non-square{
+    background-color: transparent;
+    border: none;
+}
+
+.safe-square{
+    background-color: rgb(37, 170, 37);
+}
+
+.capture-square{
+    clip-path: polygon(
+        0 20%,
+        20% 0,
+        80% 0,
+        100% 20%,
+        100% 80%,
+        80% 100%,
+        20% 100%,
+        0% 80%,
+        0% 20%
+    );
+}
+
+.move-to-square:hover{
+    background-color: rgba(0, 0, 0, 0.116);
+    clip-path: none;
+}
