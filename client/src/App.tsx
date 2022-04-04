@@ -1,62 +1,58 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import {Outlet, Route, Routes} from 'react-router-dom';
+import {useSearchParams} from 'react-router-dom';
 import CreateRoom from './Pages/CreateRoom';
-import Room from './Pages/Room';
 import {v4 as uuidv4} from 'uuid';
-import { io, Socket } from 'socket.io-client';
+import GameContext, { GameContextProps } from './Game/GameContext/gameContext';
+import SocketService from './services/socketService';
+import GameService from './services/gameService';
+import Game from './Game/Game';
 
-function App() {
-  const [socket] = useState<Socket>(io('http://198.58.97.88:9000'));
-  const [isCreator, setIsCreator] = useState<boolean>(false);
-  const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
-  const [roomId] = useState<string>(uuidv4());
-  const [isWhite, setIsWhite] = useState<boolean>();
+function App(){
+  const [isInRoom, setInRoom] = useState(false);
+  const [playerColor, setPlayerColor] = useState<"white" | "black">("black");
+  const [isPlayerTurn, setPlayerTurn] = useState(false);
+  const [isGameStarted, setGameStarted] = useState(false);
+  const [roomId, setRoomId] = useState(uuidv4());
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
-   // fetch('/api/').then(res => console.log(res))
-     // .then(res => console.log(res));
-  });
+    SocketService.connectSocket();
+  }, []);
 
-  function createRoom(){
-    setIsCreator(true);
-    joinRoom(roomId);
-  }
+  useEffect(() => {
+  
+    const roomId = searchParams.get('roomId');
 
-  function joinRoom(roomId: string){
-    //socket emit
-    console.log('socket emitted');
-    socket.emit('join-room', roomId);
+    if(roomId && SocketService.socket){
+      setRoomId(roomId);
+      setInRoom(true);
+      GameService.joinGameRoom(SocketService.socket, roomId).catch(err => console.log(err));
+    } else
+      setInRoom(false);
+    
 
-    socket.once('room-joined', () => {
-      console.log('room-joined');
-      socket.once('start-game', (isWhite: boolean) => {
-        console.log('game started', isWhite);
-        setIsWhite(isWhite);
-        setIsGameStarted(true);
-      });
-    });
-  }
+  }, [searchParams.get('roomId')]);
+
+  const gameContextValue: GameContextProps = {
+    isInRoom,
+    setInRoom,
+    playerColor,
+    setPlayerColor,
+    isPlayerTurn,
+    setPlayerTurn,
+    isGameStarted,
+    setGameStarted,
+    roomId,
+    setRoomId
+  };
 
   return (
-    <Routes>
-      <Route path='/' element={<div className='App'>
-        <Outlet />
-      </div>} >
-          <Route path='/' element={<CreateRoom 
-            createRoom={() => createRoom()}
-            roomId={roomId as string}
-          />} />
-          <Route path=':roomId' element={<Room 
-            socket={socket}
-            isCreator={isCreator}
-            isGameStarted={isGameStarted}
-            isWhite={isWhite || false}
-            joinRoom={(roomId) => joinRoom(roomId)}
-          />} />
-      </Route>
-    </Routes>
-    
+    <GameContext.Provider value={gameContextValue}>
+      <div className="App">
+        {isInRoom ? <Game /> : <CreateRoom />}
+      </div>
+    </GameContext.Provider>
   );
 }
 

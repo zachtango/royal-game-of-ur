@@ -1,31 +1,28 @@
 import './Board.css';
 
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
 import Square from './Square/Square';
 import Pebble from './Square/Pebble/Pebble';
 
-import type {coords, GameState, moves} from '../../types';
+import type {coords} from '../../types';
+import type {GameState} from '../gameTypes';
 
 interface Props {
     gameState: GameState,
-    moves: moves,
+    nextMove: coords,
     isWhite: boolean,
+    selectedPebble: coords,
     selectPebble: (pebbleCoords: coords) => void
     onMovePebble: (pebbleCoords: coords, toCoords: coords) => void
 };
 
 export default function Board({
     gameState,
-    moves,
+    nextMove,
     isWhite,
+    selectedPebble,
     selectPebble,
     onMovePebble
 }: Props){
-    console.log(gameState);
-    if(!gameState){
-        return <div>loading...</div>
-    }
 
     const boardSquares: JSX.Element[] = [];
     for(let r = 0; r < 3; r++){
@@ -33,13 +30,10 @@ export default function Board({
             const coords: coords = `[${r},${c}]`;
             
             const isTurn = isWhite === gameState.whiteIsNext;
-            console.log(isTurn);
-            const canMoveTo = moves[gameState.selectedPebble] === coords;
-            const pebble = gameState.white.boardPebbles.includes(coords) ? <Pebble 
-                canDrag={isTurn} white={true}
-            /> : gameState.black.boardPebbles.includes(coords) ? <Pebble
-                canDrag={isTurn} white={false}
-            /> : null;
+            const canMoveTo = nextMove === coords;
+
+            const pebble = gameState.white.boardPebbles.includes(coords) ? <Pebble white={true}/> : 
+                gameState.black.boardPebbles.includes(coords) ? <Pebble white={false}/> : null;
 
             boardSquares.push(
                 <Square
@@ -47,10 +41,10 @@ export default function Board({
                     isTurn={isTurn}
                     canMoveTo={canMoveTo}
                     coords={coords}
-                    selectedPebble={gameState.selectedPebble}
+                    selectedPebble={selectedPebble}
 
                     selectPebble={() => selectPebble(coords)}
-                    onMovePebble={() => onMovePebble(gameState.selectedPebble, moves[gameState.selectedPebble])}
+                    onMovePebble={() => onMovePebble(selectedPebble, nextMove)}
                 >
                     {pebble}
                 </Square>
@@ -59,10 +53,8 @@ export default function Board({
     }
 
     return (
-        <DndProvider backend={HTML5Backend}>
-            <div className="board">
-                {boardSquares}
-            </div>
-        </DndProvider>
+        <div className="board">
+            {boardSquares}
+        </div>
     );
 }

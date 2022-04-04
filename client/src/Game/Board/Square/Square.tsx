@@ -1,6 +1,4 @@
 import './Square.css';
-import React from 'react';
-import {useDrop} from 'react-dnd';
 import { coords } from '../../../types';
 import { isSafeSquare, isNonSquare } from '../../functions';
 
@@ -14,18 +12,8 @@ type Props = {
     children: JSX.Element | null
 };
 
-export default function Square({selectedPebble, isTurn, coords, canMoveTo, selectPebble, onMovePebble, children}: Props) {
-    const [{isOver, canDrop}, drop] = useDrop(() => ({
-        accept: 'Pebble',
-        canDrop: () => isTurn && canMoveTo,
-        drop: () => onMovePebble(),
-        collect: monitor => ({
-            isOver: !!monitor.isOver(),
-            canDrop: !!monitor.canDrop()
-        })
-    }), [selectedPebble]);
+export default function Square({selectedPebble, coords, canMoveTo, selectPebble, onMovePebble, children}: Props) {
     
-
     const isSelected = selectedPebble === coords;
     const isSafe = isSafeSquare(coords) && 'safe-square';
     const nonSquare = isNonSquare(coords) && 'non-square';
@@ -34,7 +22,6 @@ export default function Square({selectedPebble, isTurn, coords, canMoveTo, selec
 
     return (
         <div
-            ref={drop}
             className={`square ${isSafe} ${nonSquare} ${moveTo}`}
             onMouseDown={canMoveTo ? () => onMovePebble() : () => selectPebble()}
         >
@@ -51,7 +38,7 @@ export default function Square({selectedPebble, isTurn, coords, canMoveTo, selec
                 }}
             />}
 
-            {( isSelected || (isOver && canDrop) ) && <div
+            {isSelected && <div
                 style={{
                     width: '100%',
                     height: '100%',

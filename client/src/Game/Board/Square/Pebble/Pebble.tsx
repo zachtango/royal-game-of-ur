@@ -1,23 +1,12 @@
-import { useDrag } from 'react-dnd';
-
-export default function Pebble({canDrag, white}: {canDrag: boolean, white: boolean}){
-    const [{isDragging}, drag] = useDrag(() => ({
-        type: 'Pebble',
-        canDrag: canDrag,
-        collect: (monitor) => ({
-            isDragging: !!monitor.isDragging()
-        })
-    }), [canDrag]); 
+export default function Pebble({white}: {white: boolean}){
     
     return (
         <div
-            ref={drag}
             style={{
                 width: '100%',
                 height: '100%',
                 fontSize: '60px',
                 cursor: 'pointer',
-                opacity: isDragging ? 0.5 : 1,
                 zIndex: 2,
                 display: 'flex',
                 justifyContent: 'center',

@@ -26,15 +26,15 @@ const MoveDictionary = require('./moveDictionary.json');
 
 
 
-app.get('/', (req, res) => {
-  console.log('express 9000 visited');
-  res.json('lol');
+app.get('/payload', (req, res) => {
+  console.log('github webhook received');
+
 });
 
 io.on('connection', (socket) => {
   console.log(`${socket.id} connected`);
 
-  socket.on('join-room', (roomId) => {
+  socket.on('join-room', ({roomId}) => {
     console.log(`${roomId} requested to join`);
 
     // filters default room socket is placed in
@@ -46,7 +46,7 @@ io.on('connection', (socket) => {
     // checks if socket is already in a room or if the specific room has 2 sockets already
     if(rooms.length > 0 || (connectedSockets && connectedSockets.length > 1)){
       console.log('room-join-errpr');
-      socket.emit('join-room-error', 'room full or already in a room');
+      socket.emit('room-join-error', 'room full or already in a room');
     } else{
       console.log('room-joined');
       // joins or creates a room w/ name roomId
@@ -57,28 +57,20 @@ io.on('connection', (socket) => {
       if(io.sockets.adapter.rooms.get(roomId).size === 2){
         console.log('game started');
 
-        socket.emit('start-game', true);
-        socket.to(roomId).emit('start-game', false);
-
-        
-      }
-
-      socket.on('board-loaded', () => {
         let dice = rollDice(), whiteIsNext = true;
-        while(dice === 0){
+
+        while(dice == 0){
           dice = rollDice();
           whiteIsNext = !whiteIsNext;
         }
-        
 
-        console.log('board-loaded')
         const gameState = {
           white: {
-            pebbleCount: 7,
+            pebbleCount: 1,
             boardPebbles: ['[0,3]']
           },
           black: {
-            pebbleCount: 7,
+            pebbleCount: 1,
             boardPebbles: ['[2,3]']
           },
           dice: dice,
@@ -91,48 +83,59 @@ io.on('connection', (socket) => {
           [startCoords]: MoveDictionary[startCoords][dice - 1][whiteIsNext ? "white" : "black"]
         }
 
-        socket.emit('update-state', {newGameState: gameState, newMoves: moves});
-        socket.to(roomId).emit('update-state', {newGameState: gameState, newMoves: moves});
+        // socket.emit('on-update-game', {newGameState: gameState, newMoves: moves});
+        // socket.to(roomId).emit('on-update-game', {newGameState: gameState, newMoves: moves});
 
-        socket.once('end-game', () => {
-          socket.removeAllListeners();
-        });
+        // emit options
+        socket.emit('start-game', {playerColor: 'white', gameState: gameState, moves: moves});
+        socket.to(roomId).emit('start-game', {playerColor: 'black', gameState: gameState, moves: moves});
+        
+      }
 
-        socket.on('move-pebble', ({gameState, isWhite}) => {
-          // console.log('moved pebble', gameState, isWhite);
-          const newGameState = {...gameState, selectedPebble: '[-1,-1]'};
-          let canMove = false;
+      socket.once('game-win', ({gameState, playerColor}) => {
+        console.log('game won');
+        socket.emit('on-game-win', {gameState, playerColor});
+        socket.to(roomId).emit('on-game-win', {gameState, playerColor});
 
-          do{
-            newGameState.whiteIsNext = !newGameState.whiteIsNext;
+        socket.to(roomId).disconnectSockets();
+        socket.disconnect();
+      });
+
+      socket.on('update-game', ({gameState, moves}) => {
+
+        const newGameState = {...gameState};
+        let canMove = false;
+        const newMoves = {};
+
+        do{
+          newGameState.whiteIsNext = !newGameState.whiteIsNext;
+          dice = rollDice();
+          while(dice === 0){
             dice = rollDice();
-            while(dice === 0){
-              dice = rollDice();
-              newGameState.whiteIsNext = !newGameState.whiteIsNext;
+            newGameState.whiteIsNext = !newGameState.whiteIsNext;
+          }
+          newGameState.dice = dice;
+
+          // calc new moves
+          const playerBoardPebbles = newGameState.whiteIsNext ? newGameState.white.boardPebbles : newGameState.black.boardPebbles;
+          const otherPlayerBoardPebbles = newGameState.whiteIsNext ? newGameState.black.boardPebbles : newGameState.white.boardPebbles;
+
+          playerBoardPebbles.forEach(c => {
+            const moveCoords = canMovePebble(c, newGameState.whiteIsNext, dice, playerBoardPebbles, otherPlayerBoardPebbles);
+            if(moveCoords !== '[-1,-1]'){
+              newMoves[c] = moveCoords;
+              canMove = true;
             }
-            newGameState.dice = dice;
-  
-            // calc new moves
-            const newMoves = {};
-            const playerBoardPebbles = newGameState.whiteIsNext ? newGameState.white.boardPebbles : newGameState.black.boardPebbles;
-            const otherPlayerBoardPebbles = newGameState.whiteIsNext ? newGameState.black.boardPebbles : newGameState.white.boardPebbles;
-  
-            playerBoardPebbles.forEach(c => {
-              const moveCoords = canMovePebble(c, newGameState.whiteIsNext, dice, playerBoardPebbles, otherPlayerBoardPebbles);
-              if(moveCoords !== '[-1,-1]'){
-                newMoves[c] = moveCoords;
-                canMove = true;
-              }
-            });
-  
-            socket.emit('update-state', {newGameState: newGameState, newMoves: newMoves});
-            socket.to(roomId).emit('update-state', {newGameState: newGameState, newMoves: newMoves});
-          } while(!canMove);
+          });
           
-        });
+          
+        } while(!canMove);
+
+        socket.emit('on-update-game', {gameState: newGameState, moves: newMoves});
+        socket.to(roomId).emit('on-update-game', {gameState: newGameState, moves: newMoves});
+        
       });
     }
-
   });
 });
 
