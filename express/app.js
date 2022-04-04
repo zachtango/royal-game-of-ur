@@ -26,7 +26,7 @@ const MoveDictionary = require('./moveDictionary.json');
 
 
 
-app.get('/payload', (req, res) => {
+app.post('/payload', (req, res) => {
   console.log('github webhook received');
 
 });
