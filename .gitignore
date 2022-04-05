@@ -8,4 +8,7 @@
 .profile
 .ssh
 .viminfo
+.vim
+.local
+.config/
 
