@@ -3,8 +3,7 @@ import './Board.css';
 import Square from './Square/Square';
 import Pebble from './Square/Pebble/Pebble';
 
-import type {coords} from '../../types';
-import type {GameState} from '../gameTypes';
+import type {GameState, coords} from '../gameTypes';
 
 interface Props {
     gameState: GameState,

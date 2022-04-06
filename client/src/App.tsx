@@ -7,6 +7,7 @@ import GameContext, { GameContextProps } from './Game/GameContext/gameContext';
 import SocketService from './services/socketService';
 import GameService from './services/gameService';
 import Game from './Game/Game';
+import Taskbar from './Taskbar/Taskbar';
 
 function App(){
   const [isInRoom, setInRoom] = useState(false);
@@ -21,7 +22,6 @@ function App(){
   }, []);
 
   useEffect(() => {
-  
     const roomId = searchParams.get('roomId');
 
     if(roomId && SocketService.socket){
@@ -50,7 +50,7 @@ function App(){
   return (
     <GameContext.Provider value={gameContextValue}>
       <div className="App">
-        <h2>Royal game of Ur</h2>
+        <Taskbar />
         {isInRoom ? <Game /> : <CreateRoom />}
       </div>
     </GameContext.Provider>

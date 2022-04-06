@@ -10,7 +10,7 @@ export default function CreateRoom(){
     return (
         <div className="createRoom">
             <h1>Play Game!</h1>
-            <Link to={{pathname: '/', search: `?roomId=${roomId}`}}>Play</Link>
+            <Link to={{pathname: '/', search: `?roomId=${roomId}`}}>Play with a Friend</Link>
         </div>
     );
 }

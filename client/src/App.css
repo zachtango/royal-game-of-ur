@@ -5,3 +5,8 @@
 .App {
   text-align: center;
 }
+
+.logo{
+  width: 50px;
+  height: 50px;
+}

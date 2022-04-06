@@ -1,4 +1,4 @@
-import type { coords } from "../types";
+import { coords } from "./gameTypes";
 
 export function isSafeSquare(coords: coords): boolean{
     const r = parseInt(coords[1]), c = parseInt(coords[3]);

@@ -1,7 +1,6 @@
 import { Socket } from 'socket.io-client';
-import { moves } from '../types';
 
-import { GameState } from '../Game/gameTypes';
+import { GameState, moves } from '../Game/gameTypes';
 
 const GameService = {
 

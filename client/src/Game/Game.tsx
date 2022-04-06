@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import gameContext from './GameContext/gameContext';
-import { coords, moves } from '../types';
-import { GameState } from './gameTypes';
+import { GameState, coords, moves } from './gameTypes';
 import Board from './Board/Board';
 import { isSafeSquare } from './functions';
 import GameService from '../services/gameService';

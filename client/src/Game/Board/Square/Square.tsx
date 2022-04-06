@@ -1,5 +1,5 @@
 import './Square.css';
-import { coords } from '../../../types';
+import { coords } from '../../gameTypes';
 import { isSafeSquare, isNonSquare } from '../../functions';
 
 type Props = {
