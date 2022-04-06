@@ -30,7 +30,7 @@ const MoveDictionary = require('./moveDictionary.json');
 app.post('/payload', (req, res) => {
   console.log('github webhook received');
 
-  exec('node ../client/update.js >> logs', (err, stdout, stderr) => {
+  exec('node ~/client/update.js >> ~/logs', (err, stdout, stderr) => {
     if(err){
       console.log(`error: ${err.message}`);
       return;
