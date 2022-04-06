@@ -82,11 +82,11 @@ io.on('connection', (socket) => {
 
         const gameState = {
           white: {
-            pebbleCount: 1,
+            pebbleCount: 7,
             boardPebbles: ['[0,3]']
           },
           black: {
-            pebbleCount: 1,
+            pebbleCount: 7,
             boardPebbles: ['[2,3]']
           },
           dice: dice,
