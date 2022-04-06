@@ -1,3 +1,4 @@
+const { exec } = require('child_process');
 const cors = require('cors');
 const express = require('express');
 const { createServer } = require('http');
@@ -29,6 +30,7 @@ const MoveDictionary = require('./moveDictionary.json');
 app.post('/payload', (req, res) => {
   console.log('github webhook received');
 
+  exec('node ../client/update.js >> logs');
 });
 
 io.on('connection', (socket) => {
