@@ -33,7 +33,7 @@ export default function Square({selectedPebble, coords, canMoveTo, selectPebble,
                     width: '25px',
                     height: '25px',
                     borderRadius: '50%',
-                    opacity: 0.5,
+                    opacity: 0.6,
                     backgroundColor: 'gray'
                 }}
             />}

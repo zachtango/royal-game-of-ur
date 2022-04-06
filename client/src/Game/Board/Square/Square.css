@@ -33,6 +33,6 @@
 }
 
 .move-to-square:hover{
-    background-color: rgba(0, 0, 0, 0.116);
+    background-color: rgba(0, 0, 0, 0.4);
     clip-path: none;
 }
