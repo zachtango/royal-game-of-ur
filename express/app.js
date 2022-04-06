@@ -43,6 +43,8 @@ app.post('/payload', (req, res) => {
 
     console.log(`stdout: ${stdout}`);
   });
+
+  res.json("ok");
 });
 
 io.on('connection', (socket) => {
