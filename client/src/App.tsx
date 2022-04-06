@@ -32,7 +32,7 @@ function App(){
       setInRoom(false);
     
 
-  }, [searchParams.get('roomId')]);
+  }, [searchParams]);
 
   const gameContextValue: GameContextProps = {
     isInRoom,
