@@ -50,7 +50,7 @@ function App(){
   return (
     <GameContext.Provider value={gameContextValue}>
       <div className="App">
-        <h2>Royal Game Of Ur</h2>
+        <h2>Royal Game Of Ur test</h2>
         {isInRoom ? <Game /> : <CreateRoom />}
       </div>
     </GameContext.Provider>
