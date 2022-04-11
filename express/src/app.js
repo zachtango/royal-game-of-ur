@@ -3,6 +3,17 @@ const cors = require('cors');
 const express = require('express');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
+const mysql = require('mysql');
+require('dotenv').config();
+
+const db = mysql.createConnection({
+  host: process.env.DB_ENDPOINT,
+  user: process.env.DB_USER,
+  password: process.env.DB_KEY,
+  database: process.env.DB_NAME
+});
+
+db.connect();
 
 const app = express();
 app.use(cors());
@@ -50,7 +61,7 @@ app.post('/payload', (req, res) => {
 io.on('connection', (socket) => {
   console.log(`${socket.id} connected`);
 
-  socket.on('join-room', ({roomId}) => {
+  socket.on('join-room', ({roomId}) => { // fixme get tokens
     console.log(`${roomId} requested to join`);
 
     // filters default room socket is placed in
@@ -61,7 +72,7 @@ io.on('connection', (socket) => {
     console.log(rooms, connectedSockets);
     // checks if socket is already in a room or if the specific room has 2 sockets already
     if(rooms.length > 0 || (connectedSockets && connectedSockets.length > 1)){
-      console.log('room-join-errpr');
+      console.log('room-join-error');
       socket.emit('room-join-error', 'room full or already in a room');
     } else{
       console.log('room-joined');
@@ -72,40 +83,50 @@ io.on('connection', (socket) => {
       
       if(io.sockets.adapter.rooms.get(roomId).size === 2){
         console.log('game started');
+        let moves;
 
-        let dice = rollDice(), whiteIsNext = true;
+        const getRoomQuery = `SELECT * FROM active_rooms WHERE roomId LIKE '${roomId}'`;
+        db.query(getRoomQuery, (err, res) => {
+          let gameState;
 
-        while(dice == 0){
-          dice = rollDice();
-          whiteIsNext = !whiteIsNext;
-        }
+          if(res.length === 1){ // game exists
+            gameState = JSON.parse(res[0].game_state);
+            moves = JSON.parse(res[0].moves);
+          } else{
+            let dice = rollDice();
 
-        const gameState = {
-          white: {
-            pebbleCount: 7,
-            boardPebbles: ['[0,3]']
-          },
-          black: {
-            pebbleCount: 7,
-            boardPebbles: ['[2,3]']
-          },
-          dice: dice,
-          whiteIsNext: whiteIsNext,
-          selectedPebble: '[-1,-1]'
-        }
+            gameState = {
+              white: {
+                pebbleCount: 7,
+                boardPebbles: ['[0,3]']
+              },
+              black: {
+                pebbleCount: 7,
+                boardPebbles: ['[2,3]']
+              },
+              dice: dice,
+              whiteIsNext: true,
+              selectedPebble: '[-1,-1]'
+            }
 
-        const startCoords = whiteIsNext ? '[0,3]' : '[2,3]';
-        const moves = {
-          [startCoords]: MoveDictionary[startCoords][dice - 1][whiteIsNext ? "white" : "black"]
-        }
+            while(dice == 0){
+              dice = rollDice();
+              gameState.whiteIsNext = !gameState.whiteIsNext;
+            }
 
-        // socket.emit('on-update-game', {newGameState: gameState, newMoves: moves});
-        // socket.to(roomId).emit('on-update-game', {newGameState: gameState, newMoves: moves});
+            const startCoords = gameState.whiteIsNext ? '[0,3]' : '[2,3]';
+            moves = {
+              [startCoords]: MoveDictionary[startCoords][gameState.dice - 1][gameState.whiteIsNext ? "white" : "black"]
+            }
 
-        // emit options
-        socket.emit('start-game', {playerColor: 'white', gameState: gameState, moves: moves});
-        socket.to(roomId).emit('start-game', {playerColor: 'black', gameState: gameState, moves: moves});
-        
+            const createRoomQuery = `INSERT INTO active_rooms (roomId, game_state, moves) VALUES ('${roomId}','${JSON.stringify(gameState)}','${JSON.stringify(moves)}')`;
+            db.query(createRoomQuery);
+          }
+          
+          // emit options
+          socket.emit('start-game', {playerColor: 'white', gameState: gameState, moves: moves});
+          socket.to(roomId).emit('start-game', {playerColor: 'black', gameState: gameState, moves: moves});
+        });
       }
 
       socket.once('game-win', ({gameState, playerColor}) => {
@@ -147,8 +168,10 @@ io.on('connection', (socket) => {
           
         } while(!canMove);
 
-        socket.emit('on-update-game', {gameState: newGameState, moves: newMoves});
-        socket.to(roomId).emit('on-update-game', {gameState: newGameState, moves: newMoves});
+        const updateQuery = `UPDATE active_rooms SET game_state = '${JSON.stringify(newGameState)}', moves = '${JSON.stringify(newMoves)}' WHERE roomId LIKE '${roomId}'`;
+        db.query(updateQuery);
+
+        io.to(roomId).emit('on-update-game', {gameState: newGameState, moves: newMoves});
         
       });
     }
