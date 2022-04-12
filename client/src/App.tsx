@@ -7,7 +7,7 @@ import GameContext, { GameContextProps } from './Game/GameContext/gameContext';
 import SocketService from './services/socketService';
 import GameService from './services/gameService';
 import Game from './Game/Game';
-import Taskbar from './Taskbar/Taskbar';
+import Taskbar from './components/Taskbar';
 
 function App(){
   const [isInRoom, setInRoom] = useState(false);
