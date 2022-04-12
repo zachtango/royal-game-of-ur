@@ -29,7 +29,8 @@ const GameService = {
         listener: ({playerColor, gameState, moves} : {
             playerColor: 'white' | 'black',
             gameState: GameState,
-            moves: moves
+            moves: moves,
+            newGame: boolean
         }) => void
     ){
         socket.on('start-game', listener);

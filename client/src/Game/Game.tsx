@@ -34,18 +34,24 @@ export default function Game(){
     const [moves, setMoves] = useState<moves>({});
     const [selectedPebble, setSelectedPebble] = useState<coords>('[-1,-1]');
 
+    function deleteAllCookies(){
+        const cookies = document.cookie.split(';');
+
+        for(let i = 0; i < cookies.length; i++){
+            const cookie = cookies[i];
+            const eqPos = cookie.indexOf('=');
+            const name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
+            document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+        }
+    }
+
     function handleOnStartGame(){
         if(socket){
-            GameService.onStartGame(socket, ({playerColor, gameState, moves}) => {
-                const cookie = document.cookie;
-                if(cookie){
-                    const playerColor = cookie.substring(7);
-
-                    setPlayerColor(playerColor as "white" | "black");
-                    console.log('cookie');
-                } else{
+            GameService.onStartGame(socket, ({playerColor, gameState, moves, newGame}) => {
+                if(newGame){
                     setPlayerColor(playerColor);
                     
+                    deleteAllCookies();
 
                     // set cookie
                     const date = new Date();
@@ -53,6 +59,17 @@ export default function Game(){
                     const expires = '; expires=' + date.toUTCString();
                     document.cookie = `player=${playerColor}${expires};`;
                     console.log(document.cookie);
+                } else{
+                    const cookie = document.cookie;
+                    if(cookie){
+                        const playerColor = cookie.substring(7);
+    
+                        setPlayerColor(playerColor as "white" | "black");
+                        console.log('cookie');
+                    } else{
+                        console.log('ERROR: no cookie');
+                    }
+                    
                 }
                 
                 setGameStarted(true);
