@@ -113,8 +113,13 @@ io.on('connection', (socket) => {
               dice = rollDice();
               gameState.whiteIsNext = !gameState.whiteIsNext;
             }
+            
+            gameState.dice = dice;
 
             const startCoords = gameState.whiteIsNext ? '[0,3]' : '[2,3]';
+
+            console.log(startCoords, gameState.dice - 1, gameState.whiteIsNext);
+
             moves = {
               [startCoords]: MoveDictionary[startCoords][gameState.dice - 1][gameState.whiteIsNext ? "white" : "black"]
             }
