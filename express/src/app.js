@@ -88,11 +88,13 @@ io.on('connection', (socket) => {
         const getRoomQuery = `SELECT * FROM active_rooms WHERE roomId LIKE '${roomId}'`;
         db.query(getRoomQuery, (err, res) => {
           let gameState;
+          let newGame = false;
 
           if(res.length === 1){ // game exists
             gameState = JSON.parse(res[0].game_state);
             moves = JSON.parse(res[0].moves);
           } else{
+            newGame = true;
             let dice = rollDice();
 
             gameState = {
@@ -118,8 +120,6 @@ io.on('connection', (socket) => {
 
             const startCoords = gameState.whiteIsNext ? '[0,3]' : '[2,3]';
 
-            console.log(startCoords, gameState.dice - 1, gameState.whiteIsNext);
-
             moves = {
               [startCoords]: MoveDictionary[startCoords][gameState.dice - 1][gameState.whiteIsNext ? "white" : "black"]
             }
@@ -127,10 +127,10 @@ io.on('connection', (socket) => {
             const createRoomQuery = `INSERT INTO active_rooms (roomId, game_state, moves) VALUES ('${roomId}','${JSON.stringify(gameState)}','${JSON.stringify(moves)}')`;
             db.query(createRoomQuery);
           }
-          
+          console.log('new game: ' + newGame);
           // emit options
-          socket.emit('start-game', {playerColor: 'white', gameState: gameState, moves: moves});
-          socket.to(roomId).emit('start-game', {playerColor: 'black', gameState: gameState, moves: moves});
+          socket.emit('start-game', {playerColor: 'white', gameState: gameState, moves: moves, newGame: newGame});
+          socket.to(roomId).emit('start-game', {playerColor: 'black', gameState: gameState, moves: moves, newGame: newGame});
         });
       }
 
