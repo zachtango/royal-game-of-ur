@@ -17,6 +17,19 @@ function App(){
   const [roomId, setRoomId] = useState(uuidv4());
   const [searchParams] = useSearchParams();
 
+  const gameContextValue: GameContextProps = {
+    isInRoom,
+    setInRoom,
+    playerColor,
+    setPlayerColor,
+    isPlayerTurn,
+    setPlayerTurn,
+    isGameStarted,
+    setGameStarted,
+    roomId,
+    setRoomId
+  };
+
   useEffect(() => {
     SocketService.connectSocket();
   }, []);
@@ -33,19 +46,6 @@ function App(){
     
 
   }, [searchParams]);
-
-  const gameContextValue: GameContextProps = {
-    isInRoom,
-    setInRoom,
-    playerColor,
-    setPlayerColor,
-    isPlayerTurn,
-    setPlayerTurn,
-    isGameStarted,
-    setGameStarted,
-    roomId,
-    setRoomId
-  };
 
   return (
     <GameContext.Provider value={gameContextValue}>

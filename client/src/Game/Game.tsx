@@ -34,11 +34,28 @@ export default function Game(){
     const [moves, setMoves] = useState<moves>({});
     const [selectedPebble, setSelectedPebble] = useState<coords>('[-1,-1]');
 
-    function handleStartGame(){
+    function handleOnStartGame(){
         if(socket){
             GameService.onStartGame(socket, ({playerColor, gameState, moves}) => {
+                const cookie = document.cookie;
+                if(cookie){
+                    const playerColor = cookie.substring(7);
+
+                    setPlayerColor(playerColor as "white" | "black");
+                    console.log('cookie');
+                } else{
+                    setPlayerColor(playerColor);
+                    
+
+                    // set cookie
+                    const date = new Date();
+                    date.setTime(date.getTime() + (1*60*60*1000)); // plus 1 hour
+                    const expires = '; expires=' + date.toUTCString();
+                    document.cookie = `player=${playerColor}${expires};`;
+                    console.log(document.cookie);
+                }
+                
                 setGameStarted(true);
-                setPlayerColor(playerColor);
                 setGameState(gameState);
                 setMoves(moves);
             });
@@ -73,10 +90,10 @@ export default function Game(){
     }
 
     useEffect(() => {
-        handleStartGame();
+        handleOnStartGame();
         handleOnUpdateGame();
         handleOnGameWin();
-    }, []);
+    });
 
     function handleMovePebble(pebbleCoords: coords, toCoords: coords){
         console.log(playerColor, gameState);
