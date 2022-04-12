@@ -6,6 +6,8 @@ import { isSafeSquare } from './functions';
 import GameService from '../services/gameService';
 import SocketService from '../services/socketService';
 
+import Waiting from '../Pages/Waiting';
+
 const defaultGameState: GameState = {
     white: {
         pebbleCount: 7,
@@ -83,7 +85,7 @@ export default function Game(){
         if(socket){
             console.log('update game');
             GameService.updateGame(socket, gameState);
-        }
+        } 
     }
 
     function handleOnUpdateGame(){
@@ -206,10 +208,5 @@ export default function Game(){
         />
     </div> : <h1>Loading</h1>;
 
-    return (
-        isGameStarted ? game : <div>
-            <h1>waiting for other player</h1>
-            <p>share this link {window.location.href}</p>
-        </div>
-    );
+    return isGameStarted ? game : <Waiting />
 }
