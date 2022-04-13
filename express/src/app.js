@@ -88,7 +88,7 @@ io.on('connection', (socket) => {
         const getRoomQuery = `SELECT * FROM active_rooms WHERE roomId LIKE '${roomId}'`;
         db.query(getRoomQuery, (err, res) => {
           let gameState;
-          let newGame = true;
+          let newGame = false;
 
           if(res.length === 1){ // game exists
             gameState = JSON.parse(res[0].game_state);
