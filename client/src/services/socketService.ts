@@ -15,5 +15,4 @@ const SocketService: layout = {
 }
 
 
-
 export default SocketService;
