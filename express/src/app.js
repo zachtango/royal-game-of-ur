@@ -64,6 +64,8 @@ io.on('connection', (socket) => {
   socket.on('join-room', ({roomId}) => { // fixme get tokens
     console.log(`${roomId} requested to join`);
 
+    let isGameStarted = false;
+
     // filters default room socket is placed in
     const rooms = Array.from(socket.rooms).filter(r => r != socket.id);
     // get connectedSockets to room
@@ -75,6 +77,7 @@ io.on('connection', (socket) => {
       console.log('room-join-error');
       socket.emit('room-join-error', 'room full or already in a room');
     } else{
+
       console.log('room-joined');
       // joins or creates a room w/ name roomId
       socket.join(roomId);
@@ -82,6 +85,8 @@ io.on('connection', (socket) => {
       socket.emit('room-joined');
       
       if(io.sockets.adapter.rooms.get(roomId).size === 2){
+        isGameStarted = true;
+
         console.log('game started');
         let moves;
 
@@ -141,6 +146,26 @@ io.on('connection', (socket) => {
 
         socket.to(roomId).disconnectSockets();
         socket.disconnect();
+      });
+
+      socket.on('disconnect', () => {
+        const connectedSockets = io.sockets.adapter.rooms.get(roomId);
+        console.log('disconnect', connectedSockets);
+        if(isGameStarted){
+
+          if(connectedSockets){
+            socket.to(roomId).emit('player-disconnect');
+          } else{ // room empty
+            // delete room in db
+
+            const deleteQuery = `DELETE FROM active_rooms WHERE roomId = '${roomId}'`;
+            db.query(deleteQuery, (err, res) => {
+              console.log(res);
+            });
+
+            isGameStarted = false;
+          }
+        }
       });
 
       socket.on('update-game', ({gameState, moves}) => {
