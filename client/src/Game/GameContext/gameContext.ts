@@ -1,6 +1,8 @@
 import React from 'react';
 
 export interface GameContextProps{
+    initialized: boolean,
+    setInitialized: (initialized: boolean) => void,
     isInRoom: boolean,
     setInRoom: (inRoom: boolean) => void,
     playerColor: "white" | "black",
@@ -14,6 +16,8 @@ export interface GameContextProps{
 }
 
 const defaultState: GameContextProps = {
+    initialized: false,
+    setInitialized: () => {},
     isInRoom: false,
     setInRoom: () => {},
     playerColor: "black",

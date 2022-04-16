@@ -4,13 +4,15 @@ import { GameState, moves } from '../Game/gameTypes';
 
 const GameService = {
 
-    async joinGameRoom(socket: Socket, roomId: string): Promise<boolean>{
-        
-        return new Promise((resolve, reject) => {
-            socket.emit('join-room', {roomId});
-            socket.on('room-joined', () => resolve(true));
-            socket.on('room-join-error', ({error}) => reject(error));
-        });
+    async joinGameRoom(socket: Socket, {roomId}: {roomId: string}) {
+        console.log('test');
+
+        socket.emit('join-room', {roomId});
+        // return new Promise((resolve, reject) => {
+        //     socket.emit('join-room', {roomId});
+        //     socket.on('room-joined', () => resolve(true));
+        //     socket.on('room-join-error', ({error}) => reject(error));
+        // });
     },
 
     async updateGame(socket: Socket, gameState: GameState){

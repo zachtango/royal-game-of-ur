@@ -16,8 +16,11 @@ function App(){
   const [isGameStarted, setGameStarted] = useState(false);
   const [roomId, setRoomId] = useState(uuidv4());
   const [searchParams] = useSearchParams();
+  const [initialized, setInitialized] = useState(false);
 
   const gameContextValue: GameContextProps = {
+    initialized,
+    setInitialized,
     isInRoom,
     setInRoom,
     playerColor,
@@ -31,22 +34,27 @@ function App(){
   };
 
   useEffect(() => {
-    console.log(document.cookie);
     SocketService.connectSocket();
+    SocketService.sendUserId();
+    SocketService.onUserId();
+    SocketService.onInitialized(() => {
+      setInitialized(true);
+    });
   }, []);
 
   useEffect(() => {
     const roomId = searchParams.get('roomId');
 
-    if(roomId && SocketService.socket){
+    if(initialized && roomId && SocketService.socket){
+      
       setRoomId(roomId);
       setInRoom(true);
-      GameService.joinGameRoom(SocketService.socket, roomId).catch(err => console.log(err));
+      GameService.joinGameRoom(SocketService.socket, {roomId});
     } else
       setInRoom(false);
     
 
-  }, [searchParams]);
+  }, [searchParams, initialized]);
 
   return (
     <GameContext.Provider value={gameContextValue}>

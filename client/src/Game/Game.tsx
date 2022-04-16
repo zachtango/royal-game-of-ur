@@ -36,14 +36,17 @@ export default function Game(){
     const [moves, setMoves] = useState<moves>({});
     const [selectedPebble, setSelectedPebble] = useState<coords>('[-1,-1]');
 
-    function deleteAllCookies(){
+    function deletePlayerCookies(){
         const cookies = document.cookie.split(';');
 
         for(let i = 0; i < cookies.length; i++){
             const cookie = cookies[i];
             const eqPos = cookie.indexOf('=');
             const name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
-            document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+            if(name === 'player'){
+                console.log('delete player cookie');
+                document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+            }
         }
     }
 
@@ -53,7 +56,7 @@ export default function Game(){
                 if(newGame){
                     setPlayerColor(playerColor);
                     
-                    deleteAllCookies();
+                    deletePlayerCookies();
 
                     // set cookie
                     const date = new Date();
