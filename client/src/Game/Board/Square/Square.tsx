@@ -1,6 +1,8 @@
 import './Square.css';
 import { coords } from '../../gameTypes';
 import { isSafeSquare, isNonSquare } from '../../functions';
+import rosette from '../../../assets/rosette2.png';
+import regularSquare from '../../../assets/square.png';
 
 type Props = {
     selectedPebble: coords,
@@ -18,14 +20,23 @@ export default function Square({selectedPebble, coords, canMoveTo, selectPebble,
     const isSafe = isSafeSquare(coords) && 'safe-square';
     const nonSquare = isNonSquare(coords) && 'non-square';
     const moveTo = canMoveTo && 'move-to-square';
+    const squareSrc = isSafe ? rosette : regularSquare;
     // const captureSquare = children && canMoveTo && 'capture-square';
 
     return (
         <div
-            className={`square ${isSafe} ${nonSquare} ${moveTo}`}
+            className={`square ${nonSquare} ${moveTo}`}
             onMouseDown={canMoveTo ? () => onMovePebble() : () => selectPebble()}
         >
             {children}
+
+            {!nonSquare && <img src={squareSrc}
+                style={{
+                    position: 'absolute',
+                    width: '100px',
+                    height: '100px'
+                }}
+            />}
 
             {!children && canMoveTo && <div 
                 style={{

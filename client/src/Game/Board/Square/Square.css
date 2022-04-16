@@ -14,10 +14,6 @@
     border: none;
 }
 
-.safe-square{
-    background-color: rgb(37, 170, 37);
-}
-
 .capture-square{
     clip-path: polygon(
         0 20%,
