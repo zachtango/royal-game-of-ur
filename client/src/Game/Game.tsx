@@ -7,6 +7,7 @@ import GameService from '../services/gameService';
 import SocketService from '../services/socketService';
 
 import Waiting from '../Pages/Waiting';
+import ScoreBoard from './ScoreBoard/ScoreBoard';
 
 const defaultGameState: GameState = {
     white: {
@@ -196,11 +197,13 @@ export default function Game(){
     }
 
     const game = gameState ? <div className='game'>
-        <h1>You are {playerColor}</h1>
-        <h1>Player Move: {gameState.whiteIsNext ? "White" : "Black"}</h1>
-        <h1>Dice: {gameState.dice}</h1>
-        <h2>White: {gameState.white.pebbleCount}</h2>
-        <h2>Black: {gameState.black.pebbleCount}</h2>
+        <ScoreBoard
+            playerColor={playerColor}
+            whiteIsNext={gameState.whiteIsNext}
+            dice={gameState.dice}
+            white={gameState.white.pebbleCount}
+            black={gameState.black.pebbleCount}
+        />
         <Board 
             gameState={gameState}
             nextMove={moves[selectedPebble]}

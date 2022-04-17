@@ -52,7 +52,7 @@ export default function Board({
     }
 
     return (
-        <div className="board">
+        <div className={`board ${isWhite && 'mirror'}`}>
             {boardSquares}
         </div>
     );

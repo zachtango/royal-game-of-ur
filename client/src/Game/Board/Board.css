@@ -1,13 +1,19 @@
 .board{
-    width: 100%;
+    width: 80%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     margin: auto;
     max-width: 1200px;
-    padding-bottom: 100px;
 }
 
+.mirror{
+    -moz-transform: scale(1, -1);
+    -webkit-transform: scale(1, -1);
+    -o-transform: scale(1, -1);
+    -ms-transform: scale(1, -1);
+    transform: scale(1, -1);
+}
 
 @media screen and (max-width: 600px){
     .board{

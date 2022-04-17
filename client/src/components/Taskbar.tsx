@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import rosette from '../assets/rosette.png';
 
 const Nav = styled.nav`
-
+    text-align: center;
 `
 
 const NavImg = styled.img`

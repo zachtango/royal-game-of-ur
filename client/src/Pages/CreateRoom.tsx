@@ -8,7 +8,7 @@ export default function CreateRoom(){
     } = useContext(gameContext)
 
     return (
-        <div className="createRoom">
+        <div className="createRoom" style={{textAlign: 'center'}}>
             <h1>Play Game!</h1>
             <Link to={{pathname: '/', search: `?roomId=${roomId}`}}>Play with a Friend</Link>
         </div>
