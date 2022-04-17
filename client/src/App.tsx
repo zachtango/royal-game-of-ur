@@ -45,13 +45,14 @@ function App(){
   useEffect(() => {
     const roomId = searchParams.get('roomId');
 
-    if(initialized && roomId && SocketService.socket){
+    setInRoom(true);
+    // if(initialized && roomId && SocketService.socket){
       
-      setRoomId(roomId);
-      setInRoom(true);
-      GameService.joinGameRoom(SocketService.socket, {roomId});
-    } else
-      setInRoom(false);
+    //   setRoomId(roomId);
+    //   setInRoom(true);
+    //   GameService.joinGameRoom(SocketService.socket, {roomId});
+    // } else
+    //   setInRoom(false);
     
 
   }, [searchParams, initialized]);

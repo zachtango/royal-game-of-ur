@@ -211,5 +211,6 @@ export default function Game(){
         />
     </div> : <h1>Loading</h1>;
 
+    return game;
     return isGameStarted ? game : <Waiting />
 }
