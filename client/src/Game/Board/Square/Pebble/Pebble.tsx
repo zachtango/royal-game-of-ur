@@ -15,8 +15,8 @@ export default function Pebble({white}: {white: boolean}){
         >
             <div 
                 style={{
-                    width: '50px',
-                    height: '50px',
+                    width: '60%',
+                    height: '60%',
                     borderRadius: '50%',
                     border: '2px solid black',
                     backgroundColor: white ? 'white' : 'black',

@@ -1,13 +1,23 @@
 .square{
     width: 12.5%;
-    max-width: 100px;
-    height: 100px;
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: rgb(247, 193, 128);
     border: 1px solid black;
+}
+
+.square:before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+}
+
+.squareContent{
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
 
 .non-square{

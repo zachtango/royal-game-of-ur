@@ -65,13 +65,7 @@ export default function Square({selectedPebble, coords, canMoveTo, selectPebble,
         >
             {children}
 
-            {!nonSquare && <img src={squareSrc}
-                style={{
-                    position: 'absolute',
-                    width: '100px',
-                    height: '100px'
-                }}
-            />}
+            {!nonSquare && <img src={squareSrc} className='squareContent'/>}
 
             {!children && canMoveTo && <div 
                 style={{
