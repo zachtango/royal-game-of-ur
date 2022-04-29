@@ -37,15 +37,15 @@ function App(){
     SocketService.connectSocket();
     SocketService.sendUserId();
     SocketService.onUserId();
-    SocketService.onInitialized(() => {
-      setInitialized(true);
-    });
+    // SocketService.onInitialized(() => {
+    //   setInitialized(true);
+    // });
   }, []);
 
   useEffect(() => {
     const roomId = searchParams.get('roomId');
 
-    if(initialized && roomId && SocketService.socket){
+    if(roomId && SocketService.socket){ // initialized &&
       
       setRoomId(roomId);
       setInRoom(true);
