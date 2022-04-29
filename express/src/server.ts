@@ -1,5 +1,7 @@
 import express from 'express';
 
+import { exec } from 'child_process';
+
 import {Server, Socket} from 'socket.io';
 
 import { createServer } from 'http';
@@ -25,8 +27,24 @@ const app = express();
  **********************************************************************************/
 
 // Add api router
-app.get('/', (req, res) => {
-    res.send('ok');
+app.post('/payload', (req, res) => {
+    console.log('github webhook received');
+
+    exec('node ~/update.js >> ~/logs', (err, stdout, stderr) => {
+        if(err){
+        console.log(`error: ${err.message}`);
+        return;
+        }
+
+        if(stderr){
+        console.log(`stderr: ${stderr}`);
+        return;
+        }
+
+        console.log(`stdout: ${stdout}`);
+    });
+
+    res.json("ok");
 });
 
 // app.use('/api', apiRouter);
