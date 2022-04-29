@@ -26,10 +26,6 @@ const app = express();
  *                         API routes and error handling
  **********************************************************************************/
 
-app.get('/', (req, res) => {
-    res.send('test');
-});
-
 // Add api router
 app.post('/payload', (req, res) => {
     console.log('github webhook received');
