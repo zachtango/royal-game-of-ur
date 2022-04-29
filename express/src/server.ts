@@ -56,7 +56,7 @@ const io = new Server(httpServer, {
     cors: {
         // origin: "http://localhost:3000",
         origin: "http://198.58.97.88:3000",
-        allowedHeaders: ["Access-Control-Allow-Origin"],
+        allowedHeaders: ['Content-Type', 'Authorization'],
         methods: ['GET', 'POST']
     }
 });
