@@ -30,6 +30,7 @@ const app = express();
 app.post('/payload', (req, res) => {
     console.log('github webhook received');
 
+    
     exec('node ~/update.js >> ~/logs', (err, stdout, stderr) => {
         if(err){
         console.log(`error: ${err.message}`);
