@@ -27,6 +27,10 @@ const app = express();
  **********************************************************************************/
 
 // Add api router
+app.get('/api', (req, res) => {
+    res.send('test');
+});
+
 app.post('/payload', (req, res) => {
     console.log('github webhook received');
 
