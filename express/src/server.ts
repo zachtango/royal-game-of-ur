@@ -54,7 +54,7 @@ const active_users = new Set<string>();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
-        origin: "localhost",
+        origin: "*",
         methods: ['GET', 'POST']
     }
 });
