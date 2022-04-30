@@ -17,6 +17,7 @@ function App(){
   const [roomId, setRoomId] = useState(uuidv4());
   const [searchParams] = useSearchParams();
   const [initialized, setInitialized] = useState(false);
+  const [numOfGames, setNumOfGames] = useState(0);
 
   const gameContextValue: GameContextProps = {
     initialized,
@@ -37,10 +38,13 @@ function App(){
     SocketService.connectSocket();
     SocketService.sendUserId();
     SocketService.onUserId();
-    // SocketService.onInitialized(() => {
-    //   setInitialized(true);
-    // });
   }, []);
+
+  useEffect(() => {
+    if(SocketService.socket)
+      GameService.onNumOfGames(SocketService.socket, setNumOfGames);
+
+  }, [SocketService.socket]);
 
   useEffect(() => {
     const roomId = searchParams.get('roomId');
@@ -60,6 +64,7 @@ function App(){
     <GameContext.Provider value={gameContextValue}>
       <div className="App">
         <Taskbar />
+        <h4>Active Games: {numOfGames}</h4>
         {isInRoom ? <Game /> : <CreateRoom />}
       </div>
     </GameContext.Provider>

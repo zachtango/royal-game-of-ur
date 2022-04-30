@@ -82,6 +82,8 @@ io.on('connection', (socket) => {
         userId: mySocket.userId
     });
 
+    mySocket.emit('number-of-games', Object.keys(active_games).length);
+
     if(active_users.has(mySocket.userId)){
         console.log('user already in-game or in-queue');
         return;
@@ -110,7 +112,7 @@ io.on('connection', (socket) => {
                 console.log('game start');
                 const game = active_games[roomId];
                 
-                // fixme handle existing game
+                // handle existing game
                 if(game){
                     socket.emit('start-game', {
                         gameState: game.gameState, 
@@ -120,6 +122,7 @@ io.on('connection', (socket) => {
 
                     console.log('game exists');
                 } else{
+
                     const {newGameState, newMoves} = getNewGameState();
                 
                     // add new game to active games
@@ -137,6 +140,8 @@ io.on('connection', (socket) => {
                         playerColor: 'black',
                         newGame: true
                     });
+
+                    io.emit('number-of-games', Object.keys(active_games).length);
                 }
             }
 
@@ -164,7 +169,7 @@ io.on('connection', (socket) => {
                 if(!io.sockets.adapter.rooms.get(roomId))
                     delete active_games[roomId];
 
-                console.log(active_games, active_users);
+                io.emit('number-of-games', Object.keys(active_games).length);
             });
         }
 
