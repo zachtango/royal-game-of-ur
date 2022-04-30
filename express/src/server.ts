@@ -27,14 +27,9 @@ const app = express();
  **********************************************************************************/
 
 // Add api router
-app.get('/api', (req, res) => {
-    res.send('test');
-});
-
 app.post('/payload', (req, res) => {
     console.log('github webhook received');
-
-    
+ 
     exec('node ~/update.js >> ~/logs', (err, stdout, stderr) => {
         if(err){
         console.log(`error: ${err.message}`);
@@ -59,8 +54,8 @@ const active_users = new Set<string>();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
-        // origin: "http://localhost:3000",
-        origin: "*",
+        origin: "http://localhost:3000",
+        // origin: "*",
         methods: ['GET', 'POST']
     }
 });
