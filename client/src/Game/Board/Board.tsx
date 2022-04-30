@@ -31,8 +31,8 @@ export default function Board({
             const isTurn = isWhite === gameState.whiteIsNext;
             const canMoveTo = nextMove === coords;
 
-            const pebble = gameState.white.boardPebbles.includes(coords) ? <Pebble white={true}/> : 
-                gameState.black.boardPebbles.includes(coords) ? <Pebble white={false}/> : null;
+            const pebble = gameState.white.boardPebbles.includes(coords) ? <Pebble white={true} canMoveTo={canMoveTo}/> : 
+                gameState.black.boardPebbles.includes(coords) ? <Pebble white={false} canMoveTo={canMoveTo} /> : null;
 
             boardSquares.push(
                 <Square

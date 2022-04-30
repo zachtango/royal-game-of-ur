@@ -5,13 +5,17 @@
     justify-content: center;
     align-items: center;
     background-color: rgb(247, 193, 128);
-    border: 1px solid black;
+    border: 1px solid #b05858;
 }
 
 .square:before {
     content: "";
     display: block;
     padding-top: 100%;
+}
+
+.square img{
+    filter: invert(47%) sepia(13%) saturate(1574%) hue-rotate(314deg) brightness(89%) contrast(104%)
 }
 
 .squareContent{
@@ -24,20 +28,6 @@
 .non-square{
     background-color: transparent;
     border: none;
-}
-
-.capture-square{
-    clip-path: polygon(
-        0 20%,
-        20% 0,
-        80% 0,
-        100% 20%,
-        100% 80%,
-        80% 100%,
-        20% 100%,
-        0% 80%,
-        0% 20%
-    );
 }
 
 .move-to-square:hover{

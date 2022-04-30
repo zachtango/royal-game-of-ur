@@ -1,7 +1,15 @@
-export default function Pebble({white}: {white: boolean}){
+import './Pebble.css';
+
+interface Props{
+    white: boolean,
+    canMoveTo: boolean
+}
+
+export default function Pebble({white, canMoveTo}: Props){
     
     return (
         <div
+            
             style={{
                 width: '100%',
                 height: '100%',
@@ -14,6 +22,7 @@ export default function Pebble({white}: {white: boolean}){
             }}
         >
             <div 
+                className={`${canMoveTo && 'capture-pebble'}`}
                 style={{
                     width: '60%',
                     height: '60%',
