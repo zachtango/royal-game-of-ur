@@ -1,0 +1,34 @@
+.player-info{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.player-info .row{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.player-info p{
+    font-weight: bold;
+}
+
+.pebbleContainer{
+    display: flex;
+    flex-direction: row;
+}
+
+.circle{
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+    border: 1px solid black;
+    border-radius: 50%;
+}
+
+.circleBlack{
+    background-color: black;
+}

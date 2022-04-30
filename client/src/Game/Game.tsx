@@ -9,6 +9,9 @@ import SocketService from '../services/socketService';
 import Waiting from '../Pages/Waiting';
 import ScoreBoard from './ScoreBoard/ScoreBoard';
 
+import './Game.css';
+import PlayerInfo from './PlayerInfo/PlayerInfo';
+
 const defaultGameState: GameState = {
     white: {
         pebbleCount: 7,
@@ -197,12 +200,11 @@ export default function Game(){
     }
 
     const game = gameState ? <div className='game'>
-        <ScoreBoard
-            playerColor={playerColor}
-            whiteIsNext={gameState.whiteIsNext}
-            dice={gameState.dice}
-            white={gameState.white.pebbleCount}
-            black={gameState.black.pebbleCount}
+        <h2>Roll: {gameState.dice}</h2>
+        <PlayerInfo 
+            turn={gameState.whiteIsNext !== isWhite}
+            text="Waiting for opponent"
+            pebbleNum={!isWhite ? gameState.white.pebbleCount : gameState.black.pebbleCount}
         />
         <Board 
             gameState={gameState}
@@ -211,6 +213,11 @@ export default function Game(){
             selectedPebble={selectedPebble}
             selectPebble={handleSelectPebble}
             onMovePebble={handleMovePebble}
+        />
+        <PlayerInfo
+            turn={gameState.whiteIsNext === isWhite}
+            text="Your turn"
+            pebbleNum={isWhite ? gameState.white.pebbleCount : gameState.black.pebbleCount}
         />
     </div> : <h1>Loading</h1>;
 
