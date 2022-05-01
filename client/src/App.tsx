@@ -64,7 +64,7 @@ function App(){
     <GameContext.Provider value={gameContextValue}>
       <div className="App">
         <Taskbar />
-        <h4>Active Games: {numOfGames}</h4>
+        {/* <h4>Active Games: {numOfGames}</h4> */}
         {isInRoom ? <Game /> : <CreateRoom />}
       </div>
     </GameContext.Provider>

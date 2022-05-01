@@ -108,8 +108,8 @@ export default function Game(){
         if(socket){
             GameService.onGameWin(socket, ({gameState, playerColor}) => {
                 alert(`${playerColor} wins!`);
-                // setGameState(gameState);
-                // setMoves({});
+                setGameState(gameState);
+                setMoves({});
                 socket.disconnect();
             });
         }
