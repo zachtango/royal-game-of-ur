@@ -155,11 +155,9 @@ io.on('connection', (socket) => {
 
             socket.once('game-win', ({gameState, playerColor}) => {
                 console.log('game won');
-                socket.emit('on-game-win', {gameState, playerColor});
-                socket.to(roomId).emit('on-game-win', {gameState, playerColor});
+                io.to(roomId).emit('game-win', {gameState, playerColor});
         
-                socket.to(roomId).disconnectSockets();
-                socket.disconnect();
+                io.to(roomId).disconnectSockets();
               });
 
             socket.on('disconnect', () => {
