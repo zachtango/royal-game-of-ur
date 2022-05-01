@@ -5,7 +5,6 @@
     justify-content: center;
     align-items: center;
     background-color: rgb(247, 193, 128);
-    border: 1px solid #b05858;
 }
 
 .square:before {
@@ -31,7 +30,32 @@
     border: none;
 }
 
+.move-to-square{
+    position: absolute;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+}
+
 .move-to-square:hover{
-    background-color: rgba(0, 0, 0, 0.4);
-    clip-path: none;
+    cursor: pointer;
+    opacity: 0.5;
+    background-color: gray;
+}
+
+.move-to-dot{
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    opacity: 0.5;
+    background-color: gray;
+}
+
+.last-move{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    background-color: rgb(109, 139, 0);
 }

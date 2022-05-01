@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io-client';
 
-import { GameState, moves } from '../Game/gameTypes';
+import { GameState, moves, coords } from '../Game/gameTypes';
 
 const GameService = {
 
@@ -15,15 +15,20 @@ const GameService = {
         // });
     },
 
-    async updateGame(socket: Socket, gameState: GameState){
-        socket.emit('update-game', {gameState});
+    async move(
+        socket: Socket,
+        isWhite: boolean,
+        pebbleCoords: coords,
+        toCoords: coords
+    ){
+        socket.emit('move', {isWhite, pebbleCoords, toCoords});
     },
 
     async onUpdateGame(
         socket: Socket,
-        listener: (gameState: GameState, moves: moves) => void
+        listener: (gameState: GameState, moves: moves, lastMove: [coords, coords]) => void
     ){
-        socket.on('on-update-game', ({gameState, moves}) => listener(gameState, moves));
+        socket.on('on-update-game', ({gameState, moves, lastMove}) => listener(gameState, moves, lastMove));
     },
 
     async onStartGame(

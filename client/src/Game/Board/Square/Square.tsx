@@ -14,19 +14,18 @@ type Props = {
     isTurn: boolean,
     coords: coords,
     canMoveTo: boolean,
+    lastMove: boolean,
     selectPebble: () => void,
     onMovePebble: () => void
     children: JSX.Element | null
 };
 
-export default function Square({selectedPebble, coords, canMoveTo, selectPebble, onMovePebble, children}: Props) {
+export default function Square({selectedPebble, coords, canMoveTo, lastMove, selectPebble, onMovePebble, children}: Props) {
     
     const isSelected = selectedPebble === coords;
     const isSafe = isSafeSquare(coords) && 'safe-square';
     const nonSquare = isNonSquare(coords) && 'non-square';
-    const moveTo = canMoveTo && 'move-to-square';
     let squareSrc;
-    // const captureSquare = children && canMoveTo && 'capture-square';
 
     switch(coords){
         case '[0,1]':
@@ -60,7 +59,7 @@ export default function Square({selectedPebble, coords, canMoveTo, selectPebble,
 
     return (
         <div
-            className={`square ${nonSquare} ${moveTo}`}
+            className={`square ${nonSquare}`}
             onMouseDown={canMoveTo ? () => onMovePebble() : () => selectPebble()}
         >
             {children}
@@ -68,14 +67,15 @@ export default function Square({selectedPebble, coords, canMoveTo, selectPebble,
             {!nonSquare && <img src={squareSrc} className='squareContent'/>}
 
             {!children && canMoveTo && <div 
-                style={{
-                    position: 'absolute',
-                    width: '25px',
-                    height: '25px',
-                    borderRadius: '50%',
-                    opacity: 0.6,
-                    backgroundColor: 'gray'
-                }}
+                className='move-to-dot'
+            />}
+
+            {canMoveTo && <div
+                className='move-to-square'
+            />}
+
+            {lastMove && <div 
+                className='last-move'
             />}
 
             {isSelected && <div

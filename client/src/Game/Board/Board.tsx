@@ -10,6 +10,7 @@ interface Props {
     nextMove: coords,
     isWhite: boolean,
     selectedPebble: coords,
+    lastMove: [coords, coords],
     selectPebble: (pebbleCoords: coords) => void
     onMovePebble: (pebbleCoords: coords, toCoords: coords) => void
 };
@@ -19,6 +20,7 @@ export default function Board({
     nextMove,
     isWhite,
     selectedPebble,
+    lastMove,
     selectPebble,
     onMovePebble
 }: Props){
@@ -26,6 +28,7 @@ export default function Board({
     const boardSquares: JSX.Element[] = [];
     for(let r = 0; r < 3; r++){
         for(let c = 0; c < 8; c++){
+            console.log(lastMove);
             const coords: coords = `[${r},${c}]`;
             
             const isTurn = isWhite === gameState.whiteIsNext;
@@ -41,7 +44,7 @@ export default function Board({
                     canMoveTo={canMoveTo}
                     coords={coords}
                     selectedPebble={selectedPebble}
-
+                    lastMove={coords === lastMove[0] || coords === lastMove[1]}
                     selectPebble={() => selectPebble(coords)}
                     onMovePebble={() => onMovePebble(selectedPebble, nextMove)}
                 >

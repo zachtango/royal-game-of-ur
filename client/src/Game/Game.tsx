@@ -39,6 +39,7 @@ export default function Game(){
     const [gameState, setGameState] = useState<GameState>(defaultGameState);
     const [moves, setMoves] = useState<moves>({});
     const [selectedPebble, setSelectedPebble] = useState<coords>('[-1,-1]');
+    const [lastMove, setLastMove] = useState<[coords, coords]>(['[-1,-1]', '[-1,-1]']);
 
     function deletePlayerCookies(){
         const cookies = document.cookie.split(';');
@@ -88,18 +89,14 @@ export default function Game(){
         }
     }
 
-    function handleUpdateGame(gameState: GameState){
-        if(socket){
-            console.log('update game');
-            GameService.updateGame(socket, gameState);
-        } 
-    }
-
     function handleOnUpdateGame(){
         if(socket){
-            GameService.onUpdateGame(socket, (gameState, moves) => {
+            GameService.onUpdateGame(socket, (gameState, moves, lastMove) => {
+                console.log(lastMove);
+
                 setGameState(gameState);
                 setMoves(moves);
+                setLastMove(lastMove);
             });
         }
     }
@@ -122,64 +119,10 @@ export default function Game(){
     }, []);
 
     function handleMovePebble(pebbleCoords: coords, toCoords: coords){
-        console.log(playerColor, gameState);
         if(socket){
-            const startCoords = isWhite ? '[0,3]' : '[2,3]';
-            const otherStartCoords = isWhite ? '[2,3]' : '[0,3]';
+            GameService.move(socket, isWhite, pebbleCoords, toCoords);
             
-            // remove pebble from current position
-            const playerBoardPebbles = isWhite ? gameState.white.boardPebbles.filter(c => c !== pebbleCoords) : 
-                gameState.black.boardPebbles.filter(c => c !== pebbleCoords);
-            let playerPebbleCount = isWhite ? gameState.white.pebbleCount : gameState.black.pebbleCount;
-           
-            // remove other player pebble from board if it was captured
-            const otherPlayBoardPebbles = isWhite ? gameState.black.boardPebbles.filter(c => c !== toCoords) : 
-            gameState.white.boardPebbles.filter(c => c !== toCoords);
-            const otherPlayerPebbleCount = isWhite ? gameState.black.pebbleCount : gameState.white.pebbleCount;
-
-            // check if pebble has been moved to finish
-            if(playerPebbleCount && toCoords === (isWhite ? '[0,2]' : '[2,2]')){
-                playerPebbleCount -= 1;
-
-                // handle winning
-                if(playerPebbleCount === 0){
-                    GameService.gameWin(socket, {gameState: {
-                        ...gameState,
-                        white: isWhite ? {pebbleCount: 0, boardPebbles: playerBoardPebbles} : gameState.white,
-                        black: isWhite ? gameState.black : {pebbleCount: 0, boardPebbles: playerBoardPebbles}
-                    }, playerColor});
-                    return;
-                }
-            } else
-                playerBoardPebbles.push(toCoords);
-    
-            // re plenish player start pebbles if player has pebbles left
-            if( (playerBoardPebbles.length < playerPebbleCount) && !playerBoardPebbles.includes(startCoords) )
-                playerBoardPebbles.push(startCoords);
-    
-            // re plenish other player start pebbles if other player has pebbles left
-            if( (otherPlayBoardPebbles.length < otherPlayerPebbleCount) && !otherPlayBoardPebbles.includes(otherStartCoords) )
-                otherPlayBoardPebbles.push(otherStartCoords);
-    
-            // construct new states
-            const player = {
-                pebbleCount: playerPebbleCount,
-                boardPebbles: playerBoardPebbles
-            };
-            const otherPlayer = {
-                pebbleCount: otherPlayerPebbleCount,
-                boardPebbles: otherPlayBoardPebbles
-            };
-            const newGameState = {
-                ...gameState,
-                white: isWhite ? player : otherPlayer,
-                black: isWhite ? otherPlayer : player,
-                whiteIsNext: isSafeSquare(toCoords) ? gameState.whiteIsNext : !gameState.whiteIsNext
-            };
-            
-            setGameState(newGameState);
             setSelectedPebble('[-1,-1]');
-            handleUpdateGame({...newGameState, whiteIsNext: !newGameState.whiteIsNext});
         }
         
     }
@@ -213,6 +156,7 @@ export default function Game(){
             selectedPebble={selectedPebble}
             selectPebble={handleSelectPebble}
             onMovePebble={handleMovePebble}
+            lastMove={lastMove}
         />
         <PlayerInfo
             turn={gameState.whiteIsNext === isWhite}

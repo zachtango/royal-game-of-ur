@@ -6,8 +6,8 @@ import {Server, Socket} from 'socket.io';
 
 import { createServer } from 'http';
 import { randomUUID } from 'crypto';
-import { getNewGameState, getNextGameState } from './shared/functions';
-import { GameState, moves } from './gameTypes';
+import { getDefaultGameState, getNewGameState, getNextGameState } from './shared/functions';
+import { GameState, moves, coords } from './gameTypes';
 
 interface ExtendedSocket extends Socket{
     userId: string
@@ -123,7 +123,7 @@ io.on('connection', (socket) => {
                     console.log('game exists');
                 } else{
 
-                    const {newGameState, newMoves} = getNewGameState();
+                    const {newGameState, newMoves} = getDefaultGameState();
                 
                     // add new game to active games
                     active_games[roomId] = {gameState: newGameState, moves: newMoves};
@@ -144,6 +144,17 @@ io.on('connection', (socket) => {
                     io.emit('number-of-games', Object.keys(active_games).length);
                 }
             }
+
+            socket.on('move', ({isWhite, pebbleCoords, toCoords}: {isWhite: boolean, pebbleCoords: coords, toCoords: coords}) => {
+                const currGameState = active_games[roomId].gameState;
+
+                // calculate next game state
+                const {nextGameState, nextMoves} = getNextGameState(getNewGameState(currGameState, isWhite, pebbleCoords, toCoords));
+
+                active_games[roomId] = {gameState: nextGameState, moves: nextMoves};
+
+                io.to(roomId).emit('on-update-game', {gameState: nextGameState, moves: nextMoves, lastMove: [pebbleCoords, toCoords]});
+            });
 
             socket.on('update-game', ({gameState}: {gameState: GameState}) => {
                 const {nextGameState, nextMoves} = getNextGameState(gameState);
