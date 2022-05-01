@@ -9,7 +9,7 @@ interface Props{
 export default function PlayerInfo({turn, text, pebbleNum}: Props){
     const pebbles = [];
     for(let i = 0; i < pebbleNum; i++){
-        pebbles.push(<div className='circle circleBlack' />)
+        pebbles.push(<div key={i} className='circle circleBlack' />)
     }
     return (
         <div className="player-info">

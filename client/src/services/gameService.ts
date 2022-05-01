@@ -46,7 +46,7 @@ const GameService = {
         socket: Socket,
         listener: ({gameState, playerColor}: {gameState: GameState, playerColor: 'white' | 'black'}) => void
     ){
-        socket.on('on-game-win', listener);
+        socket.once('on-game-win', listener);
     },
 
     async onNumOfGames(

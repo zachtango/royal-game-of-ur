@@ -15,7 +15,8 @@
 }
 
 .square img{
-    filter: invert(47%) sepia(13%) saturate(1574%) hue-rotate(314deg) brightness(89%) contrast(104%)
+    pointer-events: none;
+    filter: invert(47%) sepia(13%) saturate(1574%) hue-rotate(314deg) brightness(89%) contrast(104%);
 }
 
 .squareContent{

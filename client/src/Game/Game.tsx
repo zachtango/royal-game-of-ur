@@ -7,10 +7,10 @@ import GameService from '../services/gameService';
 import SocketService from '../services/socketService';
 
 import Waiting from '../Pages/Waiting';
-import ScoreBoard from './ScoreBoard/ScoreBoard';
 
 import './Game.css';
 import PlayerInfo from './PlayerInfo/PlayerInfo';
+import GameActions from './GameActions/GameActions';
 
 const defaultGameState: GameState = {
     white: {
@@ -108,8 +108,8 @@ export default function Game(){
         if(socket){
             GameService.onGameWin(socket, ({gameState, playerColor}) => {
                 alert(`${playerColor} wins!`);
-                setGameState(gameState);
-                setMoves({});
+                // setGameState(gameState);
+                // setMoves({});
                 socket.disconnect();
             });
         }
@@ -119,7 +119,7 @@ export default function Game(){
         handleOnStartGame();
         handleOnUpdateGame();
         handleOnGameWin();
-    });
+    }, []);
 
     function handleMovePebble(pebbleCoords: coords, toCoords: coords){
         console.log(playerColor, gameState);
@@ -219,6 +219,7 @@ export default function Game(){
             text="Your turn"
             pebbleNum={isWhite ? gameState.white.pebbleCount : gameState.black.pebbleCount}
         />
+        <GameActions />
     </div> : <h1>Loading</h1>;
 
     return isGameStarted ? game : <Waiting />

@@ -13,7 +13,7 @@ const checkUp = keyframes`
 `
 
 interface CheckProps {
-  showCheck: boolean
+  $showCheck: boolean
 }
 
 const StyledCheck = styled(FaCheckCircle)<CheckProps>`
@@ -24,9 +24,7 @@ const StyledCheck = styled(FaCheckCircle)<CheckProps>`
   bottom: -0.75em;
   right: -0.75em;
 
-  ${props => !props.showCheck && `
-    display: none;
-  `}
+  display: ${props => !props.$showCheck && 'none'}
 `
 
 interface ConfirmationCheckProps {
@@ -35,7 +33,7 @@ interface ConfirmationCheckProps {
 
 function ConfirmationCheck(props: ConfirmationCheckProps) {
   return (
-    <StyledCheck showCheck={props.showCheck} />
+    <StyledCheck $showCheck={props.showCheck} />
   )
 }
 
