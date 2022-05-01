@@ -50,6 +50,9 @@ function nextTurn(whiteIsNext: boolean){
  * @returns coords
  */
 function nextMove(pebble: coords, dice: diceState, whiteIsNext: boolean, playerBoardPebbles: coords[], otherPlayerBoardPebbles: coords[]){
+    if(dice === 0)
+        return INVALID_COORDS;
+
     let toCoords = (MoveDictionary as MoveDictionary)[pebble][dice - 1][whiteIsNext ? "white" : "black"];
 
     // toCoords is invalid if impossible to move pebble from coords given
