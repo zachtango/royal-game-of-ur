@@ -153,6 +153,7 @@ io.on('connection', (socket) => {
 
                 active_games[roomId] = {gameState: nextGameState, moves: nextMoves};
 
+                // handle game win
                 if(nextGameState.black.pebbleCount === 0){
                     io.to(roomId).emit('game-win', {gameState: nextGameState, playerColor: "black"});
         
