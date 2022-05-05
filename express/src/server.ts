@@ -93,7 +93,7 @@ io.on('connection', (socket) => {
         console.log('want to join room');
 
         // filters default room socket is placed in
-        const rooms = Array.from(socket.rooms).filter(r => r != socket.id);
+        const rooms = Array.from(socket.rooms).filter(r => r !== socket.id);
         // get connectedSockets to room
         const connectedSockets = io.sockets.adapter.rooms.get(roomId);
         
@@ -155,13 +155,14 @@ io.on('connection', (socket) => {
 
                 // handle game win
                 if(nextGameState.black.pebbleCount === 0){
-                    io.to(roomId).emit('game-win', {gameState: nextGameState, playerColor: "black"});
+                    console.log('game won');
+                    io.to(roomId).emit('on-game-win', {gameState: nextGameState, playerColor: "black"});
         
                     io.to(roomId).disconnectSockets();
                     return;
                 } else if(nextGameState.white.pebbleCount === 0){
-                    io.to(roomId).emit('game-win', {gameState: nextGameState, playerColor: "white"});
-        
+                    io.to(roomId).emit('on-game-win', {gameState: nextGameState, playerColor: "white"});
+                    console.log('game won');
                     io.to(roomId).disconnectSockets();
                     return;
                 }

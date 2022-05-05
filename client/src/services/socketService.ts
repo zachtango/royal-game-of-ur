@@ -15,8 +15,8 @@ interface ExtendedSocket extends Socket{
 const SocketService: layout = {
     socket: null,
     connectSocket(){
-        this.socket = <ExtendedSocket>io('http://198.58.97.88:9000');
-        // this.socket = <ExtendedSocket>io('http://localhost:9000');
+        // this.socket = <ExtendedSocket>io('http://198.58.97.88:9000');
+        this.socket = <ExtendedSocket>io('http://localhost:9000');
     },
     onUserId(){
         const socket = this.socket;
