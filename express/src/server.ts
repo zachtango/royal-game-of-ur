@@ -153,6 +153,18 @@ io.on('connection', (socket) => {
 
                 active_games[roomId] = {gameState: nextGameState, moves: nextMoves};
 
+                if(nextGameState.black.pebbleCount === 0){
+                    io.to(roomId).emit('game-win', {gameState: nextGameState, playerColor: "black"});
+        
+                    io.to(roomId).disconnectSockets();
+                    return;
+                } else if(nextGameState.white.pebbleCount === 0){
+                    io.to(roomId).emit('game-win', {gameState: nextGameState, playerColor: "white"});
+        
+                    io.to(roomId).disconnectSockets();
+                    return;
+                }
+
                 io.to(roomId).emit('on-update-game', {gameState: nextGameState, moves: nextMoves, lastMove: [pebbleCoords, toCoords]});
             });
 
@@ -163,13 +175,6 @@ io.on('connection', (socket) => {
 
                 io.to(roomId).emit('on-update-game', {gameState: nextGameState, moves: nextMoves});
             });
-
-            socket.once('game-win', ({gameState, playerColor}) => {
-                console.log('game won');
-                io.to(roomId).emit('game-win', {gameState, playerColor});
-        
-                io.to(roomId).disconnectSockets();
-              });
 
             socket.on('disconnect', () => {
                 active_users.delete(mySocket.userId);
