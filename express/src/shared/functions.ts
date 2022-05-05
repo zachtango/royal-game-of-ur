@@ -120,11 +120,11 @@ export function getNextGameState(gameState: GameState){
 export function getDefaultGameState(){
     const newGameState = {
         white: {
-            pebbleCount: 1,
+            pebbleCount: 7,
             boardPebbles: ['[0,3]' as coords]
         },
         black: {
-            pebbleCount: 1,
+            pebbleCount: 7,
             boardPebbles: ['[2,3]' as coords]
         },
         dice: rollDice(),
