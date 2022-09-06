@@ -1,0 +1,20 @@
+.game-info button{
+    width: 35px;
+    height: 35px;
+    background-color: white;
+    border: 1px solid black;
+}
+
+.game-info .clicked{
+    background-color: red;
+}
+
+.game-info button:hover{
+    background-color: gray;
+    cursor: pointer;
+}
+
+.game-info svg{
+    width: 20px;
+    height: 20px;
+}

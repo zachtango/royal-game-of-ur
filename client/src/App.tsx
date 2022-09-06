@@ -8,6 +8,7 @@ import SocketService from './services/socketService';
 import GameService from './services/gameService';
 import Game from './Game/Game';
 import Taskbar from './components/Taskbar';
+import Home from './Pages/Home/Home';
 
 function App(){
   const [isInRoom, setInRoom] = useState(false);
@@ -63,9 +64,8 @@ function App(){
   return (
     <GameContext.Provider value={gameContextValue}>
       <div className="App">
-        <Taskbar />
-        {/* <h4>Active Games: {numOfGames}</h4> */}
-        {isInRoom ? <Game /> : <CreateRoom />}
+        
+        {isInRoom ? <Game /> : <Home />}
       </div>
     </GameContext.Provider>
   );

@@ -1,0 +1,64 @@
+.homePage{
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+}
+
+.homePage > div{
+    width: 500px;
+    height: 425px;
+
+    margin: auto;
+
+    margin-top: 100px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.options{
+    width: 500px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    padding: 30px;
+
+   
+}
+
+.option{
+    border: 1px solid #8c4703;
+    width: 120px;
+    height: 120px;
+
+    padding: 20px;
+}
+
+.option svg{
+    width: 100%;
+    height: 100%;
+}
+
+.option:hover{
+    cursor: pointer;
+    -webkit-box-shadow: 0px 0px 30px 0px #8c4703;
+    -moz-box-shadow:    0px 0px 30px 0px #8c4703;
+    box-shadow:         0px 0px 30px 0px #8c4703;
+}
+
+.robot:hover{
+    cursor: default;
+    -webkit-box-shadow: 0px 0px 0px 0px;
+    -moz-box-shadow:    0px 0px 0px 0px;
+    box-shadow:         0px 0px 0px 0px;
+}

@@ -24,11 +24,11 @@ export default function Board({
     selectPebble,
     onMovePebble
 }: Props){
+    console.log(lastMove);
 
     const boardSquares: JSX.Element[] = [];
     for(let r = 0; r < 3; r++){
         for(let c = 0; c < 8; c++){
-            console.log(lastMove);
             const coords: coords = `[${r},${c}]`;
             
             const isTurn = isWhite === gameState.whiteIsNext;

@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import gameContext from './GameContext/gameContext';
 import { GameState, coords, moves } from './gameTypes';
 import Board from './Board/Board';
-import { isSafeSquare } from './functions';
 import GameService from '../services/gameService';
 import SocketService from '../services/socketService';
 
@@ -58,6 +57,8 @@ export default function Game(){
     function handleOnStartGame(){
         if(socket){
             GameService.onStartGame(socket, ({playerColor, gameState, moves, newGame}) => {
+                console.log('game started')
+
                 if(newGame){
                     setPlayerColor(playerColor);
                     

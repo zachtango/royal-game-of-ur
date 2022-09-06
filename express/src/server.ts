@@ -27,6 +27,11 @@ const app = express();
  **********************************************************************************/
 
 // Add api router
+app.get('/', (req, res) => {
+	console.log('test');
+	res.send('ok');
+});
+
 app.post('/payload', (req, res) => {
     console.log('github webhook received');
  
@@ -76,7 +81,8 @@ io.use((socket, next) => {
 
 io.on('connection', (socket) => {
     const mySocket = <ExtendedSocket>socket;
-    console.log(mySocket.userId);
+    console.log('active games', active_games)
+    console.log('active users', active_users)
 
     mySocket.emit('user-id', {
         userId: mySocket.userId
@@ -84,10 +90,10 @@ io.on('connection', (socket) => {
 
     mySocket.emit('number-of-games', Object.keys(active_games).length);
 
-    if(active_users.has(mySocket.userId)){
-        console.log('user already in-game or in-queue');
-        return;
-    }
+//    if(active_users.has(mySocket.userId)){
+//        console.log('user already in-game or in-queue');
+//        return;
+//    }
 
     mySocket.on('join-room', ({roomId}: {roomId: string}) => {
         console.log('want to join room');
@@ -96,9 +102,10 @@ io.on('connection', (socket) => {
         const rooms = Array.from(socket.rooms).filter(r => r !== socket.id);
         // get connectedSockets to room
         const connectedSockets = io.sockets.adapter.rooms.get(roomId);
-        
+        console.log(connectedSockets);
         if( rooms.length > 0 || (connectedSockets && connectedSockets.size > 1) ){
-            socket.emit('join-room-error');
+	    console.log('join-room-error')	
+	    socket.emit('join-room-error')
         } else{
             
             active_users.add(mySocket.userId);
@@ -109,9 +116,9 @@ io.on('connection', (socket) => {
 
             const room = io.sockets.adapter.rooms.get(roomId);
             if(room && room.size === 2){
-                console.log('game start');
+                console.log('game start', mySocket.userId);
                 const game = active_games[roomId];
-                
+
                 // handle existing game
                 if(game){
                     socket.emit('start-game', {
