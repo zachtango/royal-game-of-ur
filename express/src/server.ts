@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { exec } from 'child_process';
+import { spawn, exec } from 'child_process';
 
 import {Server, Socket} from 'socket.io';
 
@@ -33,21 +33,14 @@ app.get('/', (req, res) => {
 });
 
 app.post('/payload', (req, res) => {
-    console.log('github webhook received');
- 
-    exec('node ~/server/update.js >> ~/server/logs', (err, stdout, stderr) => {
-        if(err){
-        console.log(`error: ${err.message}`);
-        return;
-        }
+    // console.log('github webhook received');
 
-        if(stderr){
-        console.log(`stderr: ${stderr}`);
-        return;
-        }
-
-        console.log(`stdout: ${stdout}`);
-    });
+    const child = spawn('/home/ec2-user/server/update', [], {
+	detached: true,
+	stdio: ['ignore', 'ignore', 'ignore']
+    }
+	
+    child.unref();
 
     res.json("ok");
 });
