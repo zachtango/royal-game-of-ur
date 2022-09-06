@@ -1,7 +1,6 @@
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
-
 const print = (err, stdout, stderr) => {
 	if(err){
 		console.log(`error: ${err.message}`);
