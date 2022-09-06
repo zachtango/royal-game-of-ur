@@ -25,7 +25,7 @@ const print = (err, stdout, stderr) => {
 	
 		exec('pm2 stop 0', (err, stdout, stderr) => print(err, stdout, stderr));
 
-		await exec('./deploy', {cwd: '/home/ec2-user/client'});
+		await exec('./deploy', {cwd: '/home/ec2-user/server/client'});
 
 
 		// process called in express/src --> treat it as if your in that folder

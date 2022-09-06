@@ -5,5 +5,5 @@ npm run build
 
 echo "Copying files to client"
 sudo rm -rf /var/www/client/*
-sudo cp -r /home/ec2-user/client/build/* /var/www/client/
+sudo cp -r /home/ec2-user/server/client/build/* /var/www/client/
 echo "Deployment complete"
