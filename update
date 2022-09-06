@@ -1,2 +1,2 @@
-node update.js >> logs
+node /home/ec2-user/server/update.js >> /home/ec2-user/server/logs
 
