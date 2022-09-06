@@ -20,10 +20,7 @@ const print = (err, stdout, stderr) => {
 	console.log(new Date().toString());
 
 	try{
-		//await exec('git pull');
-
-	
-		exec('pm2 stop 0', (err, stdout, stderr) => print(err, stdout, stderr));
+		await exec('git pull');	
 
 		await exec('./deploy', {cwd: '/home/ec2-user/server/client'});
 
@@ -35,6 +32,4 @@ const print = (err, stdout, stderr) => {
 		console.error(e);
 	}
 
-
-	exec('pm2 start 0', (err, stdout, stderr) => print(err, stdout, stderr));
 })();
