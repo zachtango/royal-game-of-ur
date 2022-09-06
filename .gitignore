@@ -13,4 +13,4 @@
 .config/
 .lesshst
 logs
-
+.env
