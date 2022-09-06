@@ -35,8 +35,7 @@ app.get('/', (req, res) => {
 app.post('/payload', (req, res) => {
     // console.log('github webhook received');
 
-    const child = spawn('./update', [], {
-	cwd: '/home/ec2-user/server',
+    const child = spawn('/home/ec2-user/server/update', [], {
 	detached: true,
 	stdio: ['ignore', 'ignore', 'ignore']
     });
