@@ -38,7 +38,7 @@ app.post('/payload', (req, res) => {
     const child = spawn('/home/ec2-user/server/update', [], {
 	detached: true,
 	stdio: ['ignore', 'ignore', 'ignore']
-    }
+    });
 	
     child.unref();
 
