@@ -16,7 +16,8 @@ const print = (err, stdout, stderr) => {
 	console.log(`stdout: ${stdout}`);
 }
 
-(async function(){
+const deploy = function(){
+
 	console.log();
 	console.log(new Date().toString());
 
@@ -37,4 +38,6 @@ const print = (err, stdout, stderr) => {
 		console.error(e);
 	}
 
-})();
+}
+
+setTimeout(deploy, 10000);
