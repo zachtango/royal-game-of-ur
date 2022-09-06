@@ -1,6 +1,7 @@
 const util = require('util');
-const exec = util.promisify(require('child_process').exec);
 
+//const exec = util.promisify(require('child_process').exec);
+const exec = require('child_process').exec
 
 const print = (err, stdout, stderr) => {
 	if(err){
@@ -20,10 +21,9 @@ const print = (err, stdout, stderr) => {
 	console.log(new Date().toString());
 
 	try{
-		await exec('git pull');	
-
-		await exec('./deploy', {cwd: '/home/ec2-user/server/client'});
-
+		exec('git pull', (err, stdin, stderr) => print(err, stdin, stderr))
+		
+		exec('./deploy', {cwd: '/home/ec2-user/server/client'}, (err, stdin, stderr) => print(err, stdin, stderr))
 
 		// process called in express/src --> treat it as if your in that folder
 		console.log("current directory: ", process.cwd());
