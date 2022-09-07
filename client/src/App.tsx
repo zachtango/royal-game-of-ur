@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import {useSearchParams} from 'react-router-dom';
-import CreateRoom from './Pages/CreateRoom';
 import {v4 as uuidv4} from 'uuid';
 import GameContext, { GameContextProps } from './Game/GameContext/gameContext';
 import SocketService from './services/socketService';
 import GameService from './services/gameService';
 import Game from './Game/Game';
-import Taskbar from './components/Taskbar';
 import Home from './Pages/Home/Home';
 
 function App(){
