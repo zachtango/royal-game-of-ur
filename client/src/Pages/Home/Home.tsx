@@ -22,7 +22,7 @@ export default function Home(){
             <div>
                 <div className='title'>
                     <img className='logo' src={rosette} alt='logo' />
-                    <h1>Royal Game of Ur test</h1>
+                    <h1>Royal Game of Ur</h1>
                 </div>
 
                 <div>
