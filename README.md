@@ -7,5 +7,6 @@ Current Features:
 
 To Add:
   - Computer bot with different difficulties (easy, medium, hard)
+  - Turn API into SaaS rather than having to maintain an EC2 instance or ECS Cluster
 
 
