@@ -27,9 +27,13 @@ export default function Home(){
 
                 <div>
                     <div className='options'>
-                        <div title={options[0]} className='option'>
+                        <Link 
+                            to={{pathname: '/how-to-play'}} 
+                            title={options[0]} 
+                            className='option'
+                        >
                             <BsFillQuestionCircleFill />
-                        </div>
+                        </Link>
 
                         <Link 
                             to={{pathname: '/', search: `?roomId=${roomId}`}} 

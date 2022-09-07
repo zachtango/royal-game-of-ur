@@ -56,6 +56,10 @@
     box-shadow:         0px 0px 30px 0px #8c4703;
 }
 
+.robot{
+    opacity: 0.5
+}
+
 .robot:hover{
     cursor: default;
     -webkit-box-shadow: 0px 0px 0px 0px;
