@@ -25,27 +25,32 @@ export default function Home(){
                     <h1>Royal Game of Ur</h1>
                 </div>
 
-                <div>
-                    <div className='options'>
+
+                <div className='options'>
+                    <div
+                        className='option'
+                    >
                         <Link 
                             to={{pathname: '/how-to-play'}} 
                             title={options[0]} 
-                            className='option'
                         >
                             <BsFillQuestionCircleFill />
                         </Link>
-
+                    </div>
+                    
+                    <div
+                        className='option'
+                    >
                         <Link 
                             to={{pathname: '/', search: `?roomId=${roomId}`}} 
-                            title={options[1]} 
-                            className='option'
+                            title={options[1]}
                         >
                             <BsPersonFill />
                         </Link>
+                    </div>
 
-                        <div title={'Coming soon (play a bot)'} className='option robot'>
-                            <AiFillRobot />
-                        </div>
+                    <div title={'Coming soon (play a bot)'} className='option robot'>
+                        <AiFillRobot />
                     </div>
                 </div>
             </div>
