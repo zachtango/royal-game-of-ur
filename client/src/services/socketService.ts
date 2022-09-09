@@ -15,7 +15,7 @@ interface ExtendedSocket extends Socket{
 const SocketService: layout = {
     socket: null,
     connectSocket(){
-        this.socket = <ExtendedSocket>io('http://34.193.62.118:9000');
+        this.socket = <ExtendedSocket>io(process.env.REACT_APP_BACKEND_IP as string);
         // this.socket = <ExtendedSocket>io('http://localhost:9000');
     },
     onUserId(){
