@@ -1,6 +1,6 @@
 # The Royal Game of Ur
 
-This is a 2 player, turn based board game hosted at http://royalgameofur.online/
+This is a 2 player, turn based board game.
 
 Current Features:
   - Online multiplayer
